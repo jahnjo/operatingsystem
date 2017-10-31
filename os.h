@@ -8,11 +8,6 @@
 
 using namespace std;
 
-<<<<<<< HEAD
-=======
-string input;
->>>>>>> 3b37df60f22bb61bf3ab414af9aaf7aef865ef5b
-
 class hardware {
 	public:
 		hardware();
@@ -44,10 +39,7 @@ class user {
         user();
         string detectInput();
         void userInput();
-<<<<<<< HEAD
         string input;
-=======
->>>>>>> 3b37df60f22bb61bf3ab414af9aaf7aef865ef5b
         
 };
 
