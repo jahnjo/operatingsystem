@@ -6,13 +6,10 @@ hardware hw;
 process process;
 user user;
 
-int i = 0;
 std::thread t1(&user::userInput, &user);
 t1.detach(); 
 
 while (1) {
-    //cout << "main loop: " << i << endl;
-    i++;
     if(user.detectInput() == "exit") {
         sleep(1);
         break;
