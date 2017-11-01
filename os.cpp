@@ -23,8 +23,6 @@ int hardware::getMemory() {
     return memory;
 }
 
-
-
 /******************** Process Class ********************/
 
 
@@ -57,8 +55,8 @@ user::user() {}
 
 void user::userInput() {
     while (1) {
-        cin >> input;
-        cout << "***" << input << "***" << endl;
+        getline(cin,input);
+        //cout << "***" << input << "***" << endl;
     }
 }
 

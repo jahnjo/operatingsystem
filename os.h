@@ -39,8 +39,7 @@ class user {
         user();
         string detectInput();
         void userInput();
-        string input;
-        
+        string input;      
 };
 
 
