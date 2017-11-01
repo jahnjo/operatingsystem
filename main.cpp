@@ -15,7 +15,7 @@ while (1) {
         break;
     }
     if(user.detectInput() == "mem") {
-        cout << endl << "Memory used: " << hw.getMemory() << endl;
+        cout << endl << "Memory usage: " << hw.getMemory() << endl;
         sleep(1);
     }
 }
