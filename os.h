@@ -44,6 +44,8 @@ class user {
         user();
         string detectInput();
         void userInput();
+        void startUserThread();
+        void enterUserGUi();
         string input;  
         string jobFile;     
 };

@@ -91,6 +91,10 @@ string user::detectInput() {
     return input;
 }
 
+void user::startUserThread() {
+    thread UserThread(enterUserGUI());
+}
+
 
 
 
