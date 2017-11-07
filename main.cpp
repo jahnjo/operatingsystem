@@ -6,16 +6,20 @@ hardware hw;
 process process;
 user user;
 
-int i = 0;
-std::thread t1(&user::userInput, &user);
-t1.detach(); 
-while (1) {
-cout << "main loop: " << i << endl;
-i++;
-sleep(1);
+thread t1(&user::userInput, &user);
 
+while (1) {
+    if(user.detectInput() == "exit") {
+        break;
+    }
+    if(user.detectInput() == "user") {
+        user();
+    }
+    user.detectInput();
+    
 }
-cout << "we broke" << endl;
+
+cout << endl << "Loop exited" << endl;
 
 return 0;
 }

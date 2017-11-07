@@ -7,16 +7,19 @@
 #define OS_H
 
 using namespace std;
-
-class hardware {
-	public:
-		hardware();
-        void takeMemory(int);
-        void returnMemory(int);
-        int getMemory();
+        
+        class hardware {
+            public:
+                hardware();
+                void takeMemory(int);
+                void returnMemory(int);
+                int getMemory();
+                int memoryUsed;
+                int memoryAvailable;
+                int percentMemory;
+                const int memory = 4096;               
   
 	private:
-	    int memory;
         string coreOne[10], coreTwo[10], coreThree[10], coreFour[10];
 };
 
@@ -28,6 +31,7 @@ class process {
         int parseMemory();
         int parseTime();
         void exitThread();
+        void loadProcess(string);
 
     private:
         string jobType[20];
@@ -39,8 +43,10 @@ class user {
         user();
         string detectInput();
         void userInput();
-        string input;
-        
+        void startUserThread();
+        void enterUserGUi();
+        string input;  
+        string jobFile;     
 };
 
 

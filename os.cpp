@@ -1,14 +1,19 @@
 #include "os.h"
 
+
+hardware hw;
+process process;
+user user;
+
 /******************** Hardware Class ********************/
 
 hardware::hardware() {
-    memory = 4096;
+    memoryAvailable = 4096;
 }
 
 void hardware::takeMemory(int requestedMemory) {
-    if(memory > requestedMemory) {
-        memory -= requestedMemory;
+    if(memoryAvailable > requestedMemory) {
+        memoryAvailable = memory - requestedMemory;
     }
     else {
         cout << "Not enough memory" << endl;
@@ -16,14 +21,12 @@ void hardware::takeMemory(int requestedMemory) {
 }
 
 void hardware::returnMemory(int returnedMemory) {
-    memory += returnedMemory;
+    memoryAvailable += returnedMemory;
 }
 
 int hardware::getMemory() {
-    return memory;
+    return memoryAvailable;
 }
-
-
 
 /******************** Process Class ********************/
 
@@ -51,32 +54,54 @@ void process::openJob(string job) {
    }
 }
 
+void process::loadProcess(string input) {
+    user.jobFile = user.input.erase(0, 5);
+    cout << "Loading " << user.jobFile << endl;
+    user.jobFile.clear(); 
+}
+
 /******************** User Class ********************/
 
 user::user() {}
 
 void user::userInput() {
     while (1) {
-        cin >> input;
-        cout << "***" << input << "***" << endl;
+        getline(cin,input);
+        //cout << "***" << input << "***" << endl;
+
     }
 }
-
 
 string user::detectInput() {
     if (input == "proc") {
         cout << input << endl;
     } else if (input == "mem") {
-        cout << input << endl;
-    } else if (input == "load") {
-        cout << input << endl;
+        hw.memoryUsed = hw.getMemory() - hw.memory;
+        hw.percentMemory = (hw.memoryUsed / hw.memory) * 100;
+        cout << endl << "Current memory usage: " << hw.memoryUsed << " MB"<< " (" << hw.percentMemory << "%)" << endl;
+    } else if (input.size() >= 4 ) {
+        if(input.compare(0,4,"load") ==  0) {
+            process.loadProcess(input);
+        }
     } else if (input == "exe") {
         cout << input << endl;
     } else if (input == "reset") {
         cout << input << endl;
-    } else if (input == "exit") {
-        cout << input << endl;
-    } 
+    }
     return input;
 }
+
+void startUserThread(){
+    
+}
+void enterUserGUI(){
+
+}
+
+void user::startUserThread() {
+    thread UserThread(enterUserGUI());
+}
+
+
+
 
