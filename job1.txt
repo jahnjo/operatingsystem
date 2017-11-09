@@ -1,0 +1,7 @@
+4
+word_processor
+calculate
+i/o
+i/o
+calculate
+EXE

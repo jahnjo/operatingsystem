@@ -1,0 +1,7 @@
+32
+internet_browser
+i/o
+i/o
+out
+calculate
+EXE
