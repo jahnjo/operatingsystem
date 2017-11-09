@@ -3,6 +3,7 @@
 #include <fstream>
 #include <thread>
 #include <unistd.h>
+#include <vector>
 #ifndef OS_H
 #define OS_H
 
@@ -36,7 +37,8 @@ class process {
 
     private:
         string jobType[20];
-        int jobMemory[20], jobTime[20];
+        int jobMemory[20], jobTime[20], i;
+
 };
 
 class user {
