@@ -3,6 +3,7 @@
 #include <fstream>
 #include <thread>
 #include <unistd.h>
+#include <vector>
 #ifndef OS_H
 #define OS_H
 
@@ -33,10 +34,11 @@ class process {
         int parseTime();
         void exitThread();
         void loadProcess(string);
+        string jobs[4];
 
     private:
-        string jobType[20];
-        int jobMemory[20], jobTime[20];
+        
+        int i;
 };
 
 class user {
@@ -44,13 +46,9 @@ class user {
         user();
         string detectInput();
         void userInput();
-        void startUserThread();
-        void enterUserGUi();
+        bool startUserMode();
         string input;  
-        string jobFile;     
+        string jobFile; 
+        string commandInput;    
 };
-
-
-
-
 #endif

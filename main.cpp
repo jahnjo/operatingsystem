@@ -7,19 +7,28 @@ process process;
 user user;
 
 thread t1(&user::userInput, &user);
+t1.detach();
+cout << "Type 'user' to enter user mode and use os commands" << endl;
+cout << "Type 'exit' to abort program" << endl;
+
+process.openJob("job1.txt");
+
 
 while (1) {
+    //cout << "mainloop -- " << user.detectInput() << endl;
     if(user.detectInput() == "exit") {
         break;
     }
     if(user.detectInput() == "user") {
-        user()
-    }
-    user.detectInput();
-    
+        user.input.clear();
+        cout << "--------------------" << endl;
+        cout << "|Entering User Mode|" << endl;
+        cout << "--------------------" << endl << endl;
+        user.startUserMode();
+        thread t1(&user::userInput, &user);
+        t1.detach();
+    }  
+    sleep(1);
 }
-
-cout << endl << "Loop exited" << endl;
-
 return 0;
 }
