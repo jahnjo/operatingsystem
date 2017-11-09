@@ -32,7 +32,10 @@ int hardware::getMemory() {
 
 
 process::process() {
-    jobs[4] = ("job1.txt","job2.txt", "job3.txt", "job4.txt");
+    jobs.push_back("job1.txt");
+    jobs.push_back("job2.txt");
+    jobs.push_back("job3.txt");
+    jobs.push_back("job4.txt");
     i = 0;
 }
 
@@ -124,22 +127,20 @@ bool user::startUserMode() {
             hw.memoryUsed = hw.getMemory() - hw.memory;
             hw.percentMemory = (hw.memoryUsed / hw.memory) * 100;
             cout << endl << "Current memory usage: " << hw.memoryUsed << " MB"<< " (" << hw.percentMemory << "%)" << endl;
-        } else if (commandInput.size() >= 4 ) {
-            if(commandInput.compare(0,4,"load") ==  0) {
-                process.loadProcess(commandInput);
+        } else if (commandInput == "load" ) {
+            for(int i = 0; i < 4; i++) {
+                process.openJob(process.jobs[i]);
             }
         } else if (commandInput == "exe") {
             cout << commandInput << endl;
-        } else if (commandInput == "rst") {
+        } else if (commandInput == "reset") {
             cout << "detected ";
             cout << commandInput << endl;
-        } else if (commandInput == "ex") {
+        } else if (commandInput == "exit") {
             cout << "Exiting User Mode" << endl;
             return true;
         }
         i++;
-        //cout << endl << "command is: " << commandInput << endl;
-        //cout << endl << "User Loop " << i << endl;
     }
 }
 

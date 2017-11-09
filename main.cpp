@@ -11,8 +11,6 @@ t1.detach();
 cout << "Type 'user' to enter user mode and use os commands" << endl;
 cout << "Type 'exit' to abort program" << endl;
 
-process.openJob("job1.txt");
-
 
 while (1) {
     //cout << "mainloop -- " << user.detectInput() << endl;

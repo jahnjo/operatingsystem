@@ -34,7 +34,8 @@ class process {
         int parseTime();
         void exitThread();
         void loadProcess(string);
-        string jobs[4];
+        //string jobs[] = {"job1.txt","job2.txt", "job3.txt", "job4.txt"};
+        vector <string> jobs;
 
     private:
         
