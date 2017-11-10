@@ -45,7 +45,7 @@ void process::openJob(string job) {
     string contents;
     fs.open(job);
     if(fs.fail()) {
-        cerr << "not opened" << endl;
+        cerr << "ERROR: File could not be opened." << endl;
     }
     else {
         cout << "should be open" << endl;
@@ -84,10 +84,12 @@ void process::openJob(string job) {
                 if (contents == "EXE"){
                     cout << endl <<"STARTING JOB EXECUTION" << endl;
                 }
-            }
+            }           
         }
    cout << "PROCESS MEM REQUIREMENT: " << jobsInSystem[i].process_mem_required << "mb" << endl;
    cout << "JOB NAME: " << jobsInSystem[i].job_name << " " << endl;
+   //trying to push job names into the stack
+   newQueue.push(jobsInSystem[i].job_name);
    cout << "NOW EXECUTING: " << jobsInSystem[i].process_operation1 << " " << endl;
    cout << "NOW EXECUTING: " << jobsInSystem[i].process_operation2 << " " << endl;
    cout << "NOW EXECUTING: " << jobsInSystem[i].process_operation3 << " " << endl;
@@ -96,12 +98,6 @@ void process::openJob(string job) {
    
 }
 
-
-void process::loadProcess(string input) {
-    user.jobFile = user.input.erase(0, 5);
-    cout << "Loading " << user.jobFile << endl;
-    user.jobFile.clear(); 
-}
 
 /******************** User Class ********************/
 
@@ -131,6 +127,13 @@ bool user::startUserMode() {
             for(int i = 0; i < 4; i++) {
                 process.openJob(process.jobs[i]);
             }
+            //printing the queue
+            for(i = 0; i < process.newQueue.size(); i++) {
+                cout << process.newQueue.front() << endl;
+                process.newQueue.pop();
+            }
+            //size of queue it says 2 but should be 4
+            cout << process.newQueue.size() << endl;
         } else if (commandInput == "exe") {
             cout << commandInput << endl;
         } else if (commandInput == "reset") {

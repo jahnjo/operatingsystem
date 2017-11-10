@@ -4,6 +4,7 @@
 #include <thread>
 #include <unistd.h>
 #include <vector>
+#include <queue>
 #ifndef OS_H
 #define OS_H
 
@@ -29,16 +30,11 @@ class process {
     public: 
         process();
         void openJob(string);
-        int parseJob();
-        int parseMemory();
-        int parseTime();
-        void exitThread();
-        void loadProcess(string);
-        //string jobs[] = {"job1.txt","job2.txt", "job3.txt", "job4.txt"};
         vector <string> jobs;
+        queue <string> newQueue;
+        queue <string> readyQueue;
 
-    private:
-        
+    private:       
         int i;
 };
 

@@ -13,7 +13,6 @@ cout << "Type 'exit' to abort program" << endl;
 
 
 while (1) {
-    //cout << "mainloop -- " << user.detectInput() << endl;
     if(user.detectInput() == "exit") {
         break;
     }
