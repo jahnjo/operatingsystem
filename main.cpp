@@ -16,7 +16,7 @@ while (1) {
     if(user.detectInput() == "exit") {
         break;
     }
-    if(user.detectInput() == "user") {
+    else if(user.detectInput() == "user") {
         user.input.clear();
         cout << "--------------------" << endl;
         cout << "|Entering User Mode|" << endl;
@@ -24,8 +24,13 @@ while (1) {
         user.startUserMode();
         thread t1(&user::userInput, &user);
         t1.detach();
-    }  
+    }
+   else if (!user.detectInput().empty()) {
+        thread t1(&user::userInput, &user);
+        t1.detach();
+   } 
     sleep(1);
-}
+}   
+
 return 0;
 }

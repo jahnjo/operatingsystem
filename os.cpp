@@ -48,7 +48,7 @@ void process::openJob(string job) {
         cerr << "ERROR: File could not be opened." << endl;
     }
     else {
-        cout << "should be open" << endl;
+        cout << "FILE OPENED" << endl;
     }
     struct process_control_block {
         string process_mem_required;
@@ -57,8 +57,9 @@ void process::openJob(string job) {
         string process_operation2;
         string process_operation3;
         string process_operation4;
+        int totalTime;
     };
-       vector<process_control_block> jobsInSystem(4);
+       vector<process_control_block> jobsInSystem(5);
     
         for (int j = 0; j < 7; j++){
             fs >> contents;
@@ -83,13 +84,12 @@ void process::openJob(string job) {
             else if (j == 6){
                 if (contents == "EXE"){
                     cout << endl <<"STARTING JOB EXECUTION" << endl;
+                    newQueue.push(jobsInSystem[i].job_name);
                 }
             }           
         }
    cout << "PROCESS MEM REQUIREMENT: " << jobsInSystem[i].process_mem_required << "mb" << endl;
-   cout << "JOB NAME: " << jobsInSystem[i].job_name << " " << endl;
-   //trying to push job names into the stack
-   newQueue.push(jobsInSystem[i].job_name);
+   cout << "JOB NAME: " << jobsInSystem[i].job_name << " " << endl; 
    cout << "NOW EXECUTING: " << jobsInSystem[i].process_operation1 << " " << endl;
    cout << "NOW EXECUTING: " << jobsInSystem[i].process_operation2 << " " << endl;
    cout << "NOW EXECUTING: " << jobsInSystem[i].process_operation3 << " " << endl;
@@ -127,13 +127,13 @@ bool user::startUserMode() {
             for(int i = 0; i < 4; i++) {
                 process.openJob(process.jobs[i]);
             }
-            //printing the queue
-            for(i = 0; i < process.newQueue.size(); i++) {
-                cout << process.newQueue.front() << endl;
-                process.newQueue.pop();
-            }
             //size of queue it says 2 but should be 4
             cout << process.newQueue.size() << endl;
+            //printing the queue
+            for(i = 0; i < 4; i++) {
+                cout << process.newQueue.front() << endl;
+                process.newQueue.pop();
+            }           
         } else if (commandInput == "exe") {
             cout << commandInput << endl;
         } else if (commandInput == "reset") {

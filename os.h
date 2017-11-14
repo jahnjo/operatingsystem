@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <vector>
 #include <queue>
+#include <cstdlib>
 #ifndef OS_H
 #define OS_H
 
