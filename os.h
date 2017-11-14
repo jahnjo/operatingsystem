@@ -4,6 +4,8 @@
 #include <thread>
 #include <unistd.h>
 #include <vector>
+#include <queue>
+#include <cstdlib>
 #ifndef OS_H
 #define OS_H
 
@@ -29,16 +31,12 @@ class process {
     public: 
         process();
         void openJob(string);
-        int parseJob();
-        int parseMemory();
-        int parseTime();
-        void exitThread();
-        void loadProcess(string);
+        vector <string> jobs;
+        queue <string> newQueue;
+        queue <string> readyQueue;
 
-    private:
-        string jobType[20];
-        int jobMemory[20], jobTime[20], i;
-
+    private:       
+        int i;
 };
 
 class user {
@@ -46,13 +44,9 @@ class user {
         user();
         string detectInput();
         void userInput();
-        void startUserThread();
-        void enterUserGUi();
+        bool startUserMode();
         string input;  
-        string jobFile;     
+        string jobFile; 
+        string commandInput;    
 };
-
-
-
-
 #endif

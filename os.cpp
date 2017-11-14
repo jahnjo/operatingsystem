@@ -32,9 +32,11 @@ int hardware::getMemory() {
 
 
 process::process() {
-    string jobs[4] = {"i/o","calculate", "yield", "out"};
+    jobs.push_back("job1.txt");
+    jobs.push_back("job2.txt");
+    jobs.push_back("job3.txt");
+    jobs.push_back("job4.txt");
     i = 0;
-
 }
 
 void process::openJob(string job) {
@@ -43,10 +45,10 @@ void process::openJob(string job) {
     string contents;
     fs.open(job);
     if(fs.fail()) {
-        cerr << "not opened" << endl;
+        cerr << "ERROR: File could not be opened." << endl;
     }
     else {
-        cout << "should be open" << endl;
+        cout << "FILE OPENED" << endl;
     }
     struct process_control_block {
         string process_mem_required;
@@ -55,8 +57,13 @@ void process::openJob(string job) {
         string process_operation2;
         string process_operation3;
         string process_operation4;
+        int operation1_time;
+        int operation2_time; 
+        int operation3_time;
+        int operation4_time;
+
     };
-    vector<process_control_block> jobsInSystem(4);
+       vector<process_control_block> jobsInSystem(5);
     
         for (int j = 0; j < 7; j++){
             fs >> contents;
@@ -68,24 +75,41 @@ void process::openJob(string job) {
             }
             else if (j == 2){
                 jobsInSystem[i].process_operation1 = contents;
+                    if (jobsInSystem[i].process_operation1 == "i/o"){
+                        jobsInSystem[i].operation1_time = rand() % 50 + 25;
+                    }
+                    else (jobsInSystem[i].operation1_time = rand() % 100 + 1);
             }
             else if (j == 3){
                 jobsInSystem[i].process_operation2 = contents;
+                if (jobsInSystem[i].process_operation2 == "i/o"){
+                        jobsInSystem[i].operation2_time = rand() % 50 + 25;
+                    }
+                    else (jobsInSystem[i].operation2_time = rand() % 100 + 1);
             }
             else if (j == 4){
                 jobsInSystem[i].process_operation3 = contents;
+                if (jobsInSystem[i].process_operation3 == "i/o"){
+                        jobsInSystem[i].operation3_time = rand() % 50 + 25;
+                    }
+                    else (jobsInSystem[i].operation3_time = rand() % 100 + 1);
             }
             else if (j == 5){
                 jobsInSystem[i].process_operation4 = contents;
+                if (jobsInSystem[i].process_operation4 == "i/o"){
+                        jobsInSystem[i].operation4_time = rand() % 50 + 25;
+                    }
+                    else (jobsInSystem[i].operation4_time = rand() % 100 + 1);
             }
             else if (j == 6){
                 if (contents == "EXE"){
                     cout << endl <<"STARTING JOB EXECUTION" << endl;
+                    newQueue.push(jobsInSystem[i].job_name);
                 }
-            }
+            }           
         }
    cout << "PROCESS MEM REQUIREMENT: " << jobsInSystem[i].process_mem_required << "mb" << endl;
-   cout << "JOB NAME: " << jobsInSystem[i].job_name << " " << endl;
+   cout << "JOB NAME: " << jobsInSystem[i].job_name << " " << endl; 
    cout << "NOW EXECUTING: " << jobsInSystem[i].process_operation1 << " " << endl;
    cout << "NOW EXECUTING: " << jobsInSystem[i].process_operation2 << " " << endl;
    cout << "NOW EXECUTING: " << jobsInSystem[i].process_operation3 << " " << endl;
@@ -94,45 +118,53 @@ void process::openJob(string job) {
    
 }
 
-void process::loadProcess(string input) {
-    user.jobFile = user.input.erase(0, 5);
-    cout << "Loading " << user.jobFile << endl;
-    user.jobFile.clear(); 
-}
 
 /******************** User Class ********************/
 
 user::user() {}
 
 void user::userInput() {
-    while (1) {
-        getline(cin,input);
-        //cout << "***" << input << "***" << endl;
-
-    }
+    getline(cin,input);
 }
 
+
 string user::detectInput() {
-    if (input == "proc") {
-        cout << input << endl;
-    } else if (input == "mem") {
-        hw.memoryUsed = hw.getMemory() - hw.memory;
-        hw.percentMemory = (hw.memoryUsed / hw.memory) * 100;
-        cout << endl << "Current memory usage: " << hw.memoryUsed << " MB"<< " (" << hw.percentMemory << "%)" << endl;
-    } else if (input.size() >= 4 ) {
-        if(input.compare(0,4,"load") ==  0) {
-            process.loadProcess(input);
-        }
-    } else if (input == "exe") {
-        cout << input << endl;
-    } else if (input == "reset") {
-        cout << input << endl;
-    }
     return input;
 }
 
-void user::startUserThread() {
-   
+bool user::startUserMode() {
+    int i = 0;
+    cout << "Waiting for input..." << endl;
+    while(1) { 
+        getline(cin, commandInput);
+        if (commandInput == "proc") {
+            cout << "Input recieved " << commandInput << endl;
+        } else if (commandInput == "mem") {
+            hw.memoryUsed = hw.getMemory() - hw.memory;
+            hw.percentMemory = (hw.memoryUsed / hw.memory) * 100;
+            cout << endl << "Current memory usage: " << hw.memoryUsed << " MB"<< " (" << hw.percentMemory << "%)" << endl;
+        } else if (commandInput == "load" ) {
+            for(int i = 0; i < 4; i++) {
+                process.openJob(process.jobs[i]);
+            }
+            //size of queue it says 2 but should be 4
+            cout << process.newQueue.size() << endl;
+            //printing the queue
+            for(i = 0; i < 4; i++) {
+                cout << process.newQueue.front() << endl;
+                process.newQueue.pop();
+            }           
+        } else if (commandInput == "exe") {
+            cout << commandInput << endl;
+        } else if (commandInput == "reset") {
+            cout << "detected ";
+            cout << commandInput << endl;
+        } else if (commandInput == "exit") {
+            cout << "Exiting User Mode" << endl;
+            return true;
+        }
+        i++;
+    }
 }
 
 
