@@ -21,22 +21,40 @@ class hardware {
         int memoryAvailable;
         int percentMemory;
         const int memory = 4096;
-                
-  
-	private:
-        string coreOne[10], coreTwo[10], coreThree[10], coreFour[10];
+            
 };
 
 class process {
     public: 
         process();
         void openJob(string);
+        void longTerm();
+        void cpuThread(int);
+        struct process_control_block {
+            int process_mem_required;
+            int PID;
+            string job_name;
+            string process_operation1;
+            string process_operation2;
+            string process_operation3;
+            string process_operation4;
+            int operation1_time;
+            int operation2_time; 
+            int operation3_time;
+            int operation4_time;
+        };
+        void roundRobin(vector<process_control_block>);
         vector <string> jobs;
-        queue <string> newQueue;
-        queue <string> readyQueue;
-
+        queue <int> newQueue;
+        queue <int> readyQueue;
+        vector<process_control_block> jobsInSystem{10};
+        queue <string> waitQueue;
     private:       
-        int i;
+        int jobIncrement;
+        int cycle;
+        bool done;
+        int quantum;
+        int op1,op2,op3,op4;
 };
 
 class user {

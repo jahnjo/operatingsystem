@@ -29,7 +29,7 @@ while (1) {
         thread t1(&user::userInput, &user);
         t1.detach();
    } 
-    sleep(1);
+    usleep(200000);
 }   
 
 return 0;
