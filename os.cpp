@@ -40,10 +40,10 @@ process::process() {
     cycle = 200000;
     done = false;
     quantum = 10;
-    op1 = 0;
-    op2 = 0;
-    op3 = 0;
-    op4 = 0;
+    //op1 = 0;
+    //op2 = 0;
+    //op3 = 0;
+    //op4 = 0;
 }
 
 void process::openJob(string job) {
@@ -72,33 +72,45 @@ void process::openJob(string job) {
             jobsInSystem[jobIncrement].process_operation1 = contents;
             if (jobsInSystem[jobIncrement].process_operation1 == "i/o") {
                 jobsInSystem[jobIncrement].operation1_time = rand() % 50 + 25;
+                //op1 = jobsInSystem[jobIncrement].operation1_time;
             }
-            else
-                (jobsInSystem[jobIncrement].operation1_time = rand() % 100 + 1);
+            else {
+                jobsInSystem[jobIncrement].operation1_time = rand() % 100 + 1;
+                //op1 = jobsInSystem[jobIncrement].operation1_time;
+            }
         }
         else if (j == 3) {
             jobsInSystem[jobIncrement].process_operation2 = contents;
             if (jobsInSystem[jobIncrement].process_operation2 == "i/o") {
                 jobsInSystem[jobIncrement].operation2_time = rand() % 50 + 25;
+                //op2 = jobsInSystem[jobIncrement].operation2_time;
             }
-            else
-                (jobsInSystem[jobIncrement].operation2_time = rand() % 100 + 1);
+            else {
+                jobsInSystem[jobIncrement].operation2_time = rand() % 100 + 1;
+                //op2 = jobsInSystem[jobIncrement].operation2_time;
+            }
         }
         else if (j == 4) {
             jobsInSystem[jobIncrement].process_operation3 = contents;
             if (jobsInSystem[jobIncrement].process_operation3 == "i/o") {
                 jobsInSystem[jobIncrement].operation3_time = rand() % 50 + 25;
+                //op3 = jobsInSystem[jobIncrement].operation3_time;
             }
-            else
-                (jobsInSystem[jobIncrement].operation3_time = rand() % 100 + 1);
+            else {
+                jobsInSystem[jobIncrement].operation3_time = rand() % 100 + 1;
+                //op3 = jobsInSystem[jobIncrement].operation3_time;
+            }
         }
         else if (j == 5) {
             jobsInSystem[jobIncrement].process_operation4 = contents;
             if (jobsInSystem[jobIncrement].process_operation4 == "i/o") {
                 jobsInSystem[jobIncrement].operation4_time = rand() % 50 + 25;
+                //op4 = jobsInSystem[jobIncrement].operation4_time;
             }
-            else
-                (jobsInSystem[jobIncrement].operation4_time = rand() % 100 + 1);
+            else {
+                jobsInSystem[jobIncrement].operation4_time = rand() % 100 + 1;
+                //op4 = jobsInSystem[jobIncrement].operation4_time;
+            }
         }
         else if (j == 6) {
             if (contents == "EXE") {
@@ -120,6 +132,16 @@ void process::openJob(string job) {
 
 void process::cpuThread(int jobNumber) {
     string job;
+    int op1,op2,op3,op4;
+    op1 = 0;
+    op2 = 0;
+    op3 = 0;
+    op4 = 0;
+
+    op1 = jobsInSystem[jobIncrement].operation1_time;
+    op2 = jobsInSystem[jobIncrement].operation2_time;
+    op3 = jobsInSystem[jobIncrement].operation3_time;
+    op4 = jobsInSystem[jobIncrement].operation4_time;
 
     job = jobsInSystem[jobNumber].job_name;
     readyQueue.pop();
@@ -129,45 +151,45 @@ void process::cpuThread(int jobNumber) {
 
     int mem = jobsInSystem[jobNumber].process_mem_required;
     hw.takeMemory(mem);
-    if (jobsInSystem[jobNumber].operation1_time > 0) {
+    if (op1 > 0) {
         cout << "Operation is: " << jobsInSystem[jobNumber].process_operation1 << endl;
-        cout << "Time: " << jobsInSystem[jobNumber].operation1_time << endl;
-        op1 = jobsInSystem[jobNumber].operation1_time - quantum;
+        cout << "Time: " << op1 << endl;
+        op1 = op1 - quantum;
         cout << "Time left: " << op1 << endl;
         if (op1 > 0) {
             readyQueue.push(jobNumber);
         }       
-    } else if (jobsInSystem[jobNumber].operation1_time <= 0) {
+    } else if (op1 <= 0) {
         cout << "Process: " << jobsInSystem[jobNumber].process_operation1 << " finished" << endl;
-        if (jobsInSystem[jobNumber].operation2_time > 11) {
+        if (op2 > 11) {
             cout << "Operation is: " << jobsInSystem[jobNumber].process_operation2 << endl;
-            cout << "Time: " << jobsInSystem[jobNumber].operation2_time << endl;
-            op2 = jobsInSystem[jobNumber].operation2_time - quantum;
+            cout << "Time: " << op2 << endl;
+            op2 = op2 - quantum;
             cout << "Time left: " << op2 << endl;
             if (op2 > 0) {
                 readyQueue.push(jobNumber);
             } 
-        } else if (jobsInSystem[jobNumber].operation2_time <= 0) {
+        } else if (op2 <= 0) {
             cout << "Process: " << jobsInSystem[jobNumber].process_operation2 << " finished" << endl;
-            if (jobsInSystem[jobNumber].operation3_time > 11) {
+            if (op3 > 11) {
                 cout << "Operation is: " << jobsInSystem[jobNumber].process_operation3 << endl;
-                cout << "Time: " << jobsInSystem[jobNumber].operation3_time << endl;
-                op3 = jobsInSystem[jobNumber].operation3_time - quantum;
+                cout << "Time: " << op3 << endl;
+                op3 = op3 - quantum;
                 cout << "Time left: " << op3 << endl;
                 if (op3 > 0) {
                     readyQueue.push(jobNumber);
                 } 
-            } else if (jobsInSystem[jobNumber].operation3_time <= 0) {
+            } else if (op3 <= 0) {
                 cout << "Process: " << jobsInSystem[jobNumber].process_operation3 << " finished" << endl;
-                if (jobsInSystem[jobNumber].operation4_time > 11) {
+                if (op4 > 11) {
                     cout << "Operation is: " << jobsInSystem[jobNumber].process_operation4 << endl;
-                    cout << "Time: " << jobsInSystem[jobNumber].operation4_time << endl;
-                    op4 = jobsInSystem[jobNumber].operation4_time - quantum;
+                    cout << "Time: " << op4 << endl;
+                    op4 = op4 - quantum;
                     cout << "Time left: " << op4 << endl;
                     if (op4 > 0) {
                         readyQueue.push(jobNumber);
                     } 
-                } else if (jobsInSystem[jobNumber].operation4_time <= 0) {
+                } else if (op4 <= 0) {
                     cout << "Process: " << jobsInSystem[jobNumber].process_operation4 << " finished" << endl << endl << endl;
                     hw.returnMemory(mem);
                 }
@@ -183,6 +205,7 @@ void process::roundRobin(vector<process_control_block> jobsInSystem) {
     cout << "Total Jobs: " << jobIncrement << endl;
     int k = 0;
     while (k < 5) {
+        cout << endl << endl << "****** Cycle:  " << k << " ******" << endl << endl;
         thread cpu1(&process::cpuThread, this, readyQueue.front());
         cpu1.join();
         thread cpu2(&process::cpuThread, this, readyQueue.front());
@@ -192,6 +215,7 @@ void process::roundRobin(vector<process_control_block> jobsInSystem) {
         thread cpu4(&process::cpuThread, this, readyQueue.front());    
         cpu4.join();
         k++;
+        sleep(1);
     }
 }
 
