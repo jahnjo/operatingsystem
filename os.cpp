@@ -130,6 +130,216 @@ void process::openJob(string job) {
    
 }
 
+void process::cpuThreadOne(int jobNumber) {
+    string job;
+    int op1_1,op1_2,op1_3,op1_4;
+    op1_1 = 0;
+    op1_2 = 0;
+    op1_3 = 0;
+    op1_4 = 0;
+
+    op1_1 = jobsInSystem[jobIncrement].operation1_time;
+    op1_2 = jobsInSystem[jobIncrement].operation2_time;
+    op1_3 = jobsInSystem[jobIncrement].operation3_time;
+    op1_4 = jobsInSystem[jobIncrement].operation4_time;
+
+    job = jobsInSystem[jobNumber].job_name;
+    readyQueue.pop();
+
+    cout << "Job Name: ";
+    cout << job << endl;
+
+    int mem = jobsInSystem[jobNumber].process_mem_required;
+    hw.takeMemory(mem);
+    if (op1 > 0) {
+        cout << "Operation is: " << jobsInSystem[jobNumber].process_operation1 << endl;
+        cout << "Time: " << op1 << endl;
+        op1 = op1 - quantum;
+        cout << "Time left: " << op1 << endl;
+        if (op1 > 0) {
+            readyQueue.push(jobNumber);
+        }       
+    } else if (op1 <= 0) {
+        cout << "Process: " << jobsInSystem[jobNumber].process_operation1 << " finished" << endl;
+        if (op2 > 11) {
+            cout << "Operation is: " << jobsInSystem[jobNumber].process_operation2 << endl;
+            cout << "Time: " << op2 << endl;
+            op2 = op2 - quantum;
+            cout << "Time left: " << op2 << endl;
+            if (op2 > 0) {
+                readyQueue.push(jobNumber);
+            } 
+        } else if (op2 <= 0) {
+            cout << "Process: " << jobsInSystem[jobNumber].process_operation2 << " finished" << endl;
+            if (op3 > 11) {
+                cout << "Operation is: " << jobsInSystem[jobNumber].process_operation3 << endl;
+                cout << "Time: " << op3 << endl;
+                op3 = op3 - quantum;
+                cout << "Time left: " << op3 << endl;
+                if (op3 > 0) {
+                    readyQueue.push(jobNumber);
+                } 
+            } else if (op3 <= 0) {
+                cout << "Process: " << jobsInSystem[jobNumber].process_operation3 << " finished" << endl;
+                if (op4 > 11) {
+                    cout << "Operation is: " << jobsInSystem[jobNumber].process_operation4 << endl;
+                    cout << "Time: " << op4 << endl;
+                    op4 = op4 - quantum;
+                    cout << "Time left: " << op4 << endl;
+                    if (op4 > 0) {
+                        readyQueue.push(jobNumber);
+                    } 
+                } else if (op4 <= 0) {
+                    cout << "Process: " << jobsInSystem[jobNumber].process_operation4 << " finished" << endl << endl << endl;
+                    hw.returnMemory(mem);
+                }
+            }
+        }
+    }
+    cout << endl << endl << endl;
+}
+
+
+void process::cpuThread(int jobNumber) {
+    string job;
+    int op1,op2,op3,op4;
+    op1 = 0;
+    op2 = 0;
+    op3 = 0;
+    op4 = 0;
+
+    op1 = jobsInSystem[jobIncrement].operation1_time;
+    op2 = jobsInSystem[jobIncrement].operation2_time;
+    op3 = jobsInSystem[jobIncrement].operation3_time;
+    op4 = jobsInSystem[jobIncrement].operation4_time;
+
+    job = jobsInSystem[jobNumber].job_name;
+    readyQueue.pop();
+
+    cout << "Job Name: ";
+    cout << job << endl;
+
+    int mem = jobsInSystem[jobNumber].process_mem_required;
+    hw.takeMemory(mem);
+    if (op1 > 0) {
+        cout << "Operation is: " << jobsInSystem[jobNumber].process_operation1 << endl;
+        cout << "Time: " << op1 << endl;
+        op1 = op1 - quantum;
+        cout << "Time left: " << op1 << endl;
+        if (op1 > 0) {
+            readyQueue.push(jobNumber);
+        }       
+    } else if (op1 <= 0) {
+        cout << "Process: " << jobsInSystem[jobNumber].process_operation1 << " finished" << endl;
+        if (op2 > 11) {
+            cout << "Operation is: " << jobsInSystem[jobNumber].process_operation2 << endl;
+            cout << "Time: " << op2 << endl;
+            op2 = op2 - quantum;
+            cout << "Time left: " << op2 << endl;
+            if (op2 > 0) {
+                readyQueue.push(jobNumber);
+            } 
+        } else if (op2 <= 0) {
+            cout << "Process: " << jobsInSystem[jobNumber].process_operation2 << " finished" << endl;
+            if (op3 > 11) {
+                cout << "Operation is: " << jobsInSystem[jobNumber].process_operation3 << endl;
+                cout << "Time: " << op3 << endl;
+                op3 = op3 - quantum;
+                cout << "Time left: " << op3 << endl;
+                if (op3 > 0) {
+                    readyQueue.push(jobNumber);
+                } 
+            } else if (op3 <= 0) {
+                cout << "Process: " << jobsInSystem[jobNumber].process_operation3 << " finished" << endl;
+                if (op4 > 11) {
+                    cout << "Operation is: " << jobsInSystem[jobNumber].process_operation4 << endl;
+                    cout << "Time: " << op4 << endl;
+                    op4 = op4 - quantum;
+                    cout << "Time left: " << op4 << endl;
+                    if (op4 > 0) {
+                        readyQueue.push(jobNumber);
+                    } 
+                } else if (op4 <= 0) {
+                    cout << "Process: " << jobsInSystem[jobNumber].process_operation4 << " finished" << endl << endl << endl;
+                    hw.returnMemory(mem);
+                }
+            }
+        }
+    }
+    cout << endl << endl << endl;
+}
+
+
+void process::cpuThread(int jobNumber) {
+    string job;
+    int op1,op2,op3,op4;
+    op1 = 0;
+    op2 = 0;
+    op3 = 0;
+    op4 = 0;
+
+    op1 = jobsInSystem[jobIncrement].operation1_time;
+    op2 = jobsInSystem[jobIncrement].operation2_time;
+    op3 = jobsInSystem[jobIncrement].operation3_time;
+    op4 = jobsInSystem[jobIncrement].operation4_time;
+
+    job = jobsInSystem[jobNumber].job_name;
+    readyQueue.pop();
+
+    cout << "Job Name: ";
+    cout << job << endl;
+
+    int mem = jobsInSystem[jobNumber].process_mem_required;
+    hw.takeMemory(mem);
+    if (op1 > 0) {
+        cout << "Operation is: " << jobsInSystem[jobNumber].process_operation1 << endl;
+        cout << "Time: " << op1 << endl;
+        op1 = op1 - quantum;
+        cout << "Time left: " << op1 << endl;
+        if (op1 > 0) {
+            readyQueue.push(jobNumber);
+        }       
+    } else if (op1 <= 0) {
+        cout << "Process: " << jobsInSystem[jobNumber].process_operation1 << " finished" << endl;
+        if (op2 > 11) {
+            cout << "Operation is: " << jobsInSystem[jobNumber].process_operation2 << endl;
+            cout << "Time: " << op2 << endl;
+            op2 = op2 - quantum;
+            cout << "Time left: " << op2 << endl;
+            if (op2 > 0) {
+                readyQueue.push(jobNumber);
+            } 
+        } else if (op2 <= 0) {
+            cout << "Process: " << jobsInSystem[jobNumber].process_operation2 << " finished" << endl;
+            if (op3 > 11) {
+                cout << "Operation is: " << jobsInSystem[jobNumber].process_operation3 << endl;
+                cout << "Time: " << op3 << endl;
+                op3 = op3 - quantum;
+                cout << "Time left: " << op3 << endl;
+                if (op3 > 0) {
+                    readyQueue.push(jobNumber);
+                } 
+            } else if (op3 <= 0) {
+                cout << "Process: " << jobsInSystem[jobNumber].process_operation3 << " finished" << endl;
+                if (op4 > 11) {
+                    cout << "Operation is: " << jobsInSystem[jobNumber].process_operation4 << endl;
+                    cout << "Time: " << op4 << endl;
+                    op4 = op4 - quantum;
+                    cout << "Time left: " << op4 << endl;
+                    if (op4 > 0) {
+                        readyQueue.push(jobNumber);
+                    } 
+                } else if (op4 <= 0) {
+                    cout << "Process: " << jobsInSystem[jobNumber].process_operation4 << " finished" << endl << endl << endl;
+                    hw.returnMemory(mem);
+                }
+            }
+        }
+    }
+    cout << endl << endl << endl;
+}
+
+
 void process::cpuThread(int jobNumber) {
     string job;
     int op1,op2,op3,op4;

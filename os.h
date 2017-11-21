@@ -54,7 +54,6 @@ class process {
         int cycle;
         bool done;
         int quantum;
-        //int op1,op2,op3,op4;
 };
 
 class user {
