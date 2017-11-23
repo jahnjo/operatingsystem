@@ -43,7 +43,7 @@ class process {
             int operation3_time;
             int operation4_time;
         };
-        void roundRobin(vector<process_control_block>);
+        void roundRobin(vector<process_control_block>, int);
         vector <string> jobs;
         queue <int> newQueue;
         queue <int> readyQueue;
