@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <vector>
 #include <queue>
+#include <stdio.h>
+#include <stdlib.h>
 #include <cstdlib>
 #ifndef OS_H
 #define OS_H
@@ -17,9 +19,10 @@ class hardware {
         void takeMemory(int);
         void returnMemory(int);
         int getMemory();
+        void resetMemory();
 	    int memoryUsed;
         int memoryAvailable;
-        int percentMemory;
+        float percentMemory;
         const int memory = 4096;
             
 };
@@ -30,6 +33,7 @@ class process {
         void openJob(string);
         void longTerm();
         void cpuThread(int);
+        void resetData();
         struct process_control_block {
             int process_mem_required;
             int PID;
@@ -52,7 +56,6 @@ class process {
     private:       
         int jobIncrement;
         int cycle;
-        bool done;
         int quantum;
 };
 
