@@ -55,10 +55,11 @@ class process {
             string currentOperation;
         };
         void roundRobin(vector<process_control_block>, int);
+        void randGen(int);
         vector <string> jobs;
         queue <int> newQueue;
         queue <int> readyQueue;
-        vector<process_control_block> jobsInSystem{10};
+        vector<process_control_block> jobsInSystem{1000};
         queue <int> waitQueue;
     private:       
         int jobIncrement;

@@ -1,17 +1,27 @@
 #include "os.h"
 
-
+/*
+Creating objects for each class
+*/
 hardware hw;
 process process;
 user user;
 
 /******************** Hardware Class ********************/
 
+/*
+Constructor for hardware class
+Initialize memory available and percent memory
+*/
 hardware::hardware() {
     memoryAvailable = 4096;
     percentMemory = 0.0;
 }
 
+/*
+Removes requested memory from memory bank
+Parameter: requestedMemory - Memory required for each process/job
+*/
 void hardware::takeMemory(int requestedMemory) {
     if(memoryAvailable > requestedMemory) {
         memoryAvailable = memoryAvailable - requestedMemory;
@@ -21,19 +31,35 @@ void hardware::takeMemory(int requestedMemory) {
     }
 }
 
+/*
+Returns memory after job is finished
+Parameter: returnedMemory - how much memory the job borrowed and is returning.
+*/
 void hardware::returnMemory(int returnedMemory) {
     memoryAvailable += returnedMemory;
 }
 
+/*
+Getter for memory
+Return: memory used by a single job.
+*/
 int hardware::getMemory() {
     return memory - memoryAvailable;
 }
 
+/*
+Used in resetData() to reset memory back to 4096 MB
+*/
 void hardware::resetMemory() {
     memoryAvailable = 4096;
     cout << "Memory has been reset" << endl;
 }
 
+/*
+Takes in memory used by a job and calculates the percentage out of the total memory
+Parameter: mem - Memory used by job.
+Return: percentMemory - percent out of the total memory
+*/
 float hardware::getPercentMemory(int mem) {
     percentMemory = (float(mem) / float(memory)) * 100;
     return percentMemory;
@@ -41,7 +67,11 @@ float hardware::getPercentMemory(int mem) {
 
 /******************** Process Class ********************/
 
-
+/*
+Constructor process class
+Loading in preset jobs into the jobs vector to be loaded into the PCB
+Initializing varibles needed for algorithm and job loader
+*/
 process::process() {
     jobs.push_back("job1.txt");
     jobs.push_back("job2.txt");
@@ -58,6 +88,12 @@ process::process() {
     quantum = 10;
 }
 
+/*
+Takes jobs from preloaded vector and loads all job information into the pcb as well
+as print information about the job as well as moving each job into the newQueue and running
+the long term scheduler once fully complete.
+Parameter: job - Name of job like "job1.txt"
+*/
 void process::openJob(string job) {
     jobIncrement++;
     fstream fs;
@@ -145,6 +181,84 @@ void process::openJob(string job) {
    
 }
 
+/*
+Random input files generator that prompts user and asked them how many jobs they would like to create.
+After generating the job, it will call the long term scheduler and move jobs from newQueue to readQueue.
+Parameter: numFiles - number of files user wants to create.
+*/
+void process::randGen(int numFiles) {
+    string names[] = {"vivado","modelsim","netbeans","mozilla","clion","paint","word","visual_studio","runescape","task_manager"};
+    string operation[] = {"i/o","out","yield","calculate"};
+    for (int i = 0; i < numFiles; i++) {
+        jobIncrement++;
+        //cout << names[rand() % 9 + 0] << endl;
+        jobsInSystem[jobIncrement].PID = jobIncrement;
+        newQueue.push(jobIncrement);
+        jobsInSystem[jobIncrement].job_name = names[rand() % 9 + 0];
+        jobsInSystem[jobIncrement].process_operation1 = operation[rand() % 3 + 0];
+        jobsInSystem[jobIncrement].process_operation2 = operation[rand() % 3 + 0];
+        jobsInSystem[jobIncrement].process_operation3 = operation[rand() % 3 + 0];
+        jobsInSystem[jobIncrement].process_operation4 = operation[rand() % 3 + 0];
+
+        if(jobsInSystem[jobIncrement].process_operation1 == "i/o") {
+            jobsInSystem[jobIncrement].operation1_time = rand() % 50 + 25;
+            jobsInSystem[jobIncrement].totalTime = jobsInSystem[jobIncrement].operation1_time;
+        } else {
+            jobsInSystem[jobIncrement].operation1_time = rand() % 100 + 1;
+            jobsInSystem[jobIncrement].totalTime = jobsInSystem[jobIncrement].operation1_time;
+        }
+
+        if(jobsInSystem[jobIncrement].process_operation2 == "i/o") {
+            jobsInSystem[jobIncrement].operation2_time = rand() % 50 + 25;
+            jobsInSystem[jobIncrement].totalTime = jobsInSystem[jobIncrement].operation2_time;
+        } else {
+            jobsInSystem[jobIncrement].operation2_time = rand() % 100 + 1;
+            jobsInSystem[jobIncrement].totalTime = jobsInSystem[jobIncrement].operation2_time;
+        }
+
+        if(jobsInSystem[jobIncrement].process_operation3 == "i/o") {
+            jobsInSystem[jobIncrement].operation3_time = rand() % 50 + 25;
+            jobsInSystem[jobIncrement].totalTime = jobsInSystem[jobIncrement].operation3_time;
+        } else {
+            jobsInSystem[jobIncrement].operation3_time = rand() % 100 + 1;
+            jobsInSystem[jobIncrement].totalTime = jobsInSystem[jobIncrement].operation3_time;
+        }
+
+        if(jobsInSystem[jobIncrement].process_operation4 == "i/o") {
+            jobsInSystem[jobIncrement].operation4_time = rand() % 50 + 25;
+            jobsInSystem[jobIncrement].totalTime = jobsInSystem[jobIncrement].operation4_time;
+        } else {
+            jobsInSystem[jobIncrement].operation4_time = rand() % 100 + 1;
+            jobsInSystem[jobIncrement].totalTime = jobsInSystem[jobIncrement].operation4_time;
+        }
+
+        jobsInSystem[jobIncrement].process_mem_required = rand() % 1 + 1028;
+        jobsInSystem[jobIncrement].timeLeft = jobsInSystem[jobIncrement].totalTime;
+
+        cout << endl << endl;
+        cout << "PROCESS MEM REQUIREMENT: " << jobsInSystem[jobIncrement].process_mem_required << "mb" << endl;
+        cout << "JOB NAME, PID: " << jobsInSystem[jobIncrement].job_name << " ," << jobsInSystem[jobIncrement].PID << endl;
+        cout << "NOW EXECUTING: " << jobsInSystem[jobIncrement].process_operation1 << " time: " << jobsInSystem[jobIncrement].operation1_time << endl;
+        cout << "NOW EXECUTING: " << jobsInSystem[jobIncrement].process_operation2 << " time: " << jobsInSystem[jobIncrement].operation2_time << endl;
+        cout << "NOW EXECUTING: " << jobsInSystem[jobIncrement].process_operation3 << " time: " << jobsInSystem[jobIncrement].operation3_time << endl;
+        cout << "NOW EXECUTING: " << jobsInSystem[jobIncrement].process_operation4 << " time: " << jobsInSystem[jobIncrement].operation4_time << endl;
+        cout << "TOTAL TIME: " << jobsInSystem[jobIncrement].totalTime << endl;
+        cout << endl;
+        longTerm();
+
+    }
+
+}
+
+
+/*
+Algorithm that functions a single cpu thread that takes in 1 job and decrements the time by 1 quantum and as well as
+gathers useful information like iocycles, time spent in cpu, time left to spend in cpu, and current operation
+used to give information to 'proc' command. Also pushes and pops jobs from the readyQueue and pushes jobs into
+the waitQueue if current operation is i/o or yield. Services out operation by printing pcb information to the 
+terminal.
+Paramter: jobNumber - PID of job used to access PCB data
+*/
 void process::cpuThread(int jobNumber) {
     string job;
 
@@ -292,8 +406,13 @@ void process::cpuThread(int jobNumber) {
     hw.returnMemory(mem);
 }
 
-
-
+/*
+Short term scheduler that uses round robin to pull jobs from the readyQueue and pushes them into the cpu. 
+It runs 1 cpu core and 4 threads. It also services user input to stop/pause mid execution and sends user back 
+user mode to run commands.
+Parameter: jobsInSystem - vector of type pcb that contains all information regarding each job.
+           k - integer containing number of cycles the user wants to run the os for.
+*/
 void process::roundRobin(vector<process_control_block> jobsInSystem, int k) {
     cout << "Total Jobs: " << jobIncrement << endl;
     int i = 0;
@@ -335,12 +454,20 @@ void process::roundRobin(vector<process_control_block> jobsInSystem, int k) {
     }
 }
 
+/*
+Long term scheduler that moves jobs from newQueue to readyQueue when their PCB is fully loaded.
+*/
 void process::longTerm() {
     //move new queue items to ready queue
     readyQueue.push(newQueue.front());
     newQueue.pop();
 }
 
+/*
+Function run when the user types 'reset' that will re-initialize all variables and reload all
+jobs back into the jobs vector. It will also reset all queue's as well as delete all progress 
+that each job has made within the cpu.
+*/
 void process::resetData() {
     jobIncrement = -1;
     jobs.clear();
@@ -366,17 +493,28 @@ void process::resetData() {
 
 /******************** User Class ********************/
 
+/*
+Constructor for user class
+*/
 user::user() {}
 
+/*
+Function created as a seperate thread to detect user input asynchronously
+*/
 void user::userInput() {
     getline(cin,input);
 }
 
-
+/*
+Getter for user input so that user mode can service the input
+*/
 string user::detectInput() {
     return input;
 }
 
+/*
+Function that services all user commands as well as exits user mode to go back to kernel mode
+*/
 void user::startUserMode() {
     int i = 0;
     while(1) { 
@@ -437,6 +575,12 @@ void user::startUserMode() {
             }
         } else if (commandInput == "reset") {
             process.resetData();
+
+        } else if (commandInput == "rand") {
+            cout << "How many files would you like to create?" << endl;
+            int numFiles;
+            cin >> numFiles;
+            process.randGen(numFiles);
         } else if (commandInput == "exit") {
             cout << endl;
             cout << "---------------------" << endl;
