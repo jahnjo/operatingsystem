@@ -5,7 +5,10 @@
 #include <unistd.h>
 #include <vector>
 #include <queue>
+#include <stdio.h>
+#include <stdlib.h>
 #include <cstdlib>
+#include <iomanip>
 #ifndef OS_H
 #define OS_H
 
@@ -17,26 +20,52 @@ class hardware {
         void takeMemory(int);
         void returnMemory(int);
         int getMemory();
+        void resetMemory();
+        float getPercentMemory(int);
 	    int memoryUsed;
         int memoryAvailable;
-        int percentMemory;
+        float percentMemory;
         const int memory = 4096;
-                
-  
-	private:
-        string coreOne[10], coreTwo[10], coreThree[10], coreFour[10];
+            
 };
 
 class process {
     public: 
         process();
+        bool threadSelect;
         void openJob(string);
+        void longTerm();
+        void cpuThread(int);
+        void resetData();
+        struct process_control_block {
+            int process_mem_required;
+            int PID;
+            string job_name;
+            string process_operation1;
+            string process_operation2;
+            string process_operation3;
+            string process_operation4;
+            int operation1_time;
+            int operation2_time; 
+            int operation3_time;
+            int operation4_time;
+            int totalTime;
+            int timeElapsed;
+            int timeLeft;
+            int ioCycles;
+            string currentOperation;
+        };
+        void roundRobin(vector<process_control_block>, int,bool);
+        void randGen(int);
         vector <string> jobs;
-        queue <string> newQueue;
-        queue <string> readyQueue;
-
+        queue <int> newQueue;
+        queue <int> readyQueue;
+        vector<process_control_block> jobsInSystem{1000};
+        queue <int> waitQueue;
     private:       
-        int i;
+        int jobIncrement;
+        int cycle;
+        int quantum;
 };
 
 class user {
@@ -44,7 +73,7 @@ class user {
         user();
         string detectInput();
         void userInput();
-        bool startUserMode();
+        void startUserMode();
         string input;  
         string jobFile; 
         string commandInput;    
