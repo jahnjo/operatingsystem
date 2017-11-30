@@ -32,6 +32,7 @@ class hardware {
 class process {
     public: 
         process();
+        bool threadSelect;
         void openJob(string);
         void longTerm();
         void cpuThread(int);
@@ -54,7 +55,7 @@ class process {
             int ioCycles;
             string currentOperation;
         };
-        void roundRobin(vector<process_control_block>, int);
+        void roundRobin(vector<process_control_block>, int,bool);
         void randGen(int);
         vector <string> jobs;
         queue <int> newQueue;

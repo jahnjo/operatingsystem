@@ -232,7 +232,8 @@ void process::randGen(int numFiles) {
             jobsInSystem[jobIncrement].totalTime = jobsInSystem[jobIncrement].operation4_time;
         }
 
-        jobsInSystem[jobIncrement].process_mem_required = rand() % 1 + 1028;
+        jobsInSystem[jobIncrement].process_mem_required = rand() % 1028 + 1;
+        cout << "size: " << jobsInSystem[jobIncrement].process_mem_required << endl;
         jobsInSystem[jobIncrement].timeLeft = jobsInSystem[jobIncrement].totalTime;
 
         cout << endl << endl;
@@ -264,7 +265,7 @@ void process::cpuThread(int jobNumber) {
 
     job = jobsInSystem[jobNumber].job_name;
     if (readyQueue.size() > 0) {
-        readyQueue.pop();
+            readyQueue.pop(); 
     }
 
     cout << "Job Name: ";
@@ -412,8 +413,10 @@ It runs 1 cpu core and 4 threads. It also services user input to stop/pause mid 
 user mode to run commands.
 Parameter: jobsInSystem - vector of type pcb that contains all information regarding each job.
            k - integer containing number of cycles the user wants to run the os for.
+           threadSelect - bool that chooses between which threading method the user wants the short term
+                          scheduler to use.
 */
-void process::roundRobin(vector<process_control_block> jobsInSystem, int k) {
+void process::roundRobin(vector<process_control_block> jobsInSystem, int k, bool threadSelect) {
     cout << "Total Jobs: " << jobIncrement << endl;
     int i = 0;
     thread t1(&user::userInput, &user);
@@ -421,18 +424,29 @@ void process::roundRobin(vector<process_control_block> jobsInSystem, int k) {
     while (i < k) {
         cout << endl << endl << "****** Cycle:  " << i << " ******" << endl << endl;
         if (!readyQueue.empty()) {
-            thread cpu1(&process::cpuThread, this, readyQueue.front());
-            cpu1.join();
-            thread cpu2(&process::cpuThread, this, readyQueue.front());
-            cpu2.join();
-            thread cpu3(&process::cpuThread, this, readyQueue.front());
-            cpu3.join();
-            thread cpu4(&process::cpuThread, this, readyQueue.front());    
-            cpu4.join();
-            /*cpu1.join();
-            cpu2.join();
-            cpu3.join();
-            cpu4.join();*/
+            if (threadSelect == 0) {
+                thread cpu1(&process::cpuThread, this, readyQueue.front());
+                cpu1.join();
+                thread cpu2(&process::cpuThread, this, readyQueue.front());
+                cpu2.join();
+                thread cpu3(&process::cpuThread, this, readyQueue.front());
+                cpu3.join();
+                thread cpu4(&process::cpuThread, this, readyQueue.front());
+                cpu4.join();
+            } else if (threadSelect == 1) {
+                thread cpu1(&process::cpuThread, this, readyQueue.front());
+                //readyQueue.pop();
+                thread cpu2(&process::cpuThread, this, readyQueue.front());
+                //readyQueue.pop();
+                thread cpu3(&process::cpuThread, this, readyQueue.front());
+                //readyQueue.pop();
+                thread cpu4(&process::cpuThread, this, readyQueue.front());
+                //readyQueue.pop();    
+                cpu1.join();
+                cpu2.join();
+                cpu3.join();
+                cpu4.join();
+            }
         }
         if (user.detectInput() == "stop") {
             cout << "Ready Queue size: " << readyQueue.size() << endl;
@@ -545,9 +559,7 @@ void user::startUserMode() {
                     procQueue.pop();
                     cout << endl << endl;
                 }
-            } else if (procQueue.size() == 0) {
-                cout << endl << "ERROR: There are no unfinished processes" << endl;
-            }
+            } 
 
 
         } else if (commandInput == "mem") {
@@ -562,11 +574,17 @@ void user::startUserMode() {
             } else {
                 cout << endl << endl;
                 int cycles = 0;
+                bool type;
                 cout << "How many cycles would you like to run?" << endl;
                 cin >> cycles;
+                cout << endl;
+                cout << "Select thread type.." << endl;
+                cout << "'1' = multithreading" << endl;
+                cout << "'0' = singlethreading" << endl;
+                cin >> type;
                 cin.clear();
                 cin.ignore(10000,'\n');
-                process.roundRobin(process.jobsInSystem, cycles);
+                process.roundRobin(process.jobsInSystem, cycles, type);
                 sleep(2);
                 if (detectInput() == "d") {
                 }
@@ -581,6 +599,7 @@ void user::startUserMode() {
             int numFiles;
             cin >> numFiles;
             process.randGen(numFiles);
+            continue;
         } else if (commandInput == "exit") {
             cout << endl;
             cout << "---------------------" << endl;
@@ -589,6 +608,15 @@ void user::startUserMode() {
             cout << "Type 'user' to enter user mode and use os commands" << endl;
             cout << "Type 'exit' to abort program" << endl;
             return;
+        } else if (!commandInput.empty()){
+            cout << "unsupported command - try again please" << endl;
+            cout << endl << "choose from the following commands" << endl;
+            cout << "'load  - load predefined jobs into system" << endl;
+            cout << "'exe'  - execute a chosen amount of cycles (let OS run on its own)" << endl;
+            cout << "'proc' - show unfinshed jobs + job info" << endl;
+            cout << "'rand' - choose how many jobs system should randomly generate" << endl;
+            cout << "'mem'  - display how much memory is used by processes in system" << endl;
+            cout << "'exit' - exit back to kernel mode" << endl;
         }
         i++;
     }

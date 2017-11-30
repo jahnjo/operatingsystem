@@ -23,12 +23,20 @@ while (1) {
         cout << "--------------------" << endl;
         cout << "|Entering User Mode|" << endl;
         cout << "--------------------" << endl << endl;
+        cout << endl << "choose from the following commands" << endl;
+        cout << "'load  - load predefined jobs into system" << endl;
+        cout << "'exe'  - execute a chosen amount of cycles (let OS run on its own)" << endl;
+        cout << "'proc' - show unfinshed jobs + job info" << endl;
+        cout << "'rand' - choose how many jobs system should randomly generate" << endl;
+        cout << "'mem'  - display how much memory is used by processes in system" << endl;
+        cout << "'exit' - exit back to kernel mode" << endl;
         user.startUserMode();
         thread t1(&user::userInput, &user);
         t1.detach();
     }
    //restarts the thread  if no user input detected but not an expected input
    else if (!user.detectInput().empty()) {
+        cout << "unsupported command - try again please" << endl;
         thread t1(&user::userInput, &user);
         t1.detach();
    } 
