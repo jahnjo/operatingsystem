@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdlib>
+#include <iomanip>
 #ifndef OS_H
 #define OS_H
 
@@ -20,6 +21,7 @@ class hardware {
         void returnMemory(int);
         int getMemory();
         void resetMemory();
+        float getPercentMemory(int);
 	    int memoryUsed;
         int memoryAvailable;
         float percentMemory;
@@ -46,13 +48,18 @@ class process {
             int operation2_time; 
             int operation3_time;
             int operation4_time;
+            int totalTime;
+            int timeElapsed;
+            int timeLeft;
+            int ioCycles;
+            string currentOperation;
         };
         void roundRobin(vector<process_control_block>, int);
         vector <string> jobs;
         queue <int> newQueue;
         queue <int> readyQueue;
         vector<process_control_block> jobsInSystem{10};
-        queue <string> waitQueue;
+        queue <int> waitQueue;
     private:       
         int jobIncrement;
         int cycle;
@@ -64,7 +71,7 @@ class user {
         user();
         string detectInput();
         void userInput();
-        bool startUserMode();
+        void startUserMode();
         string input;  
         string jobFile; 
         string commandInput;    
